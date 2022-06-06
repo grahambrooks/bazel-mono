@@ -1,0 +1,14 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  deploy:
+    name: Build and release
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test
+        run: bazel test //...
+      - name: package
+        run: bazel run //simple/service:push_service
