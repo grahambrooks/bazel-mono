@@ -1,8 +1,11 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
 
 go_library(
     name = "service_lib",
-    srcs = ["main.go"],
+    srcs = [
+        "main.go",
+        "root_handler.go",
+    ],
     importpath = "github.com/grahambrooks/bazel-demo/simple/service",
     visibility = ["//visibility:private"],
     deps = ["@com_github_gorilla_mux//:mux"],
@@ -34,4 +37,10 @@ container_push(
     registry = "ghcr.io",
     repository = "grahambrooks/bazel-mono",
     tag = "dev",
+)
+
+go_test(
+    name = "service_test",
+    srcs = ["root_handler_test.go"],
+    embed = [":service_lib"],
 )
