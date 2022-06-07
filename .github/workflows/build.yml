@@ -14,7 +14,13 @@ jobs:
       with:
         path: "~/.cache/bazel"
         key: bazel
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 #    - name: Test
 #      run: bazel test //...
     - name: Package
-      run: bazel run //simple/service:push_service
+      run: bazel run --define=IMAGE_TAG=${{ github.ref_name }} --stamp //simple/service:push_service
